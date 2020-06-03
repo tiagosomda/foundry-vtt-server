@@ -23,6 +23,11 @@ I think the main issue was with azure throttling IO operations.
 After my raspberry pi setup, I decided to do the same, but with a linux VM in Azure.  
 It worked really well!  
 
+## I don't want to go through the trouble of doing all of this setup
+There is a really good service called Forge VTT.  
+It probably does a very similar setup, but you don't need to deal with any of it.  
+- https://forge-vtt.com/
+
 ## About this repo:
 My friend showed me something he did and that inspired me to create this repo with some instructions.
 
