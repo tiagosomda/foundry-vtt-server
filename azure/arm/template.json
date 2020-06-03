@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_foundry_linux_server_name": {
+            "defaultValue": "foundry-linux-server",
+            "type": "String"
+        },
+        "disks_foundry_linux_server_OsDisk_1_2b8adb9904674553a8d4a5727d67b6bf_externalid": {
+            "defaultValue": "/subscriptions/0b8d0d00-6c34-4ef2-9961-5ee606d77dd8/resourceGroups/DND-FOUNDRY-SERVER/providers/Microsoft.Compute/disks/foundry-linux-server_OsDisk_1_2b8adb9904674553a8d4a5727d67b6bf",
+            "type": "String"
+        },
+        "networkInterfaces_foundry_linux_server960_externalid": {
+            "defaultValue": "/subscriptions/0b8d0d00-6c34-4ef2-9961-5ee606d77dd8/resourceGroups/dnd-foundry-server/providers/Microsoft.Network/networkInterfaces/foundry-linux-server960",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-07-01",
+            "name": "[parameters('virtualMachines_foundry_linux_server_name')]",
+            "location": "westus",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D4s_v3"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "canonical",
+                        "offer": "0001-com-ubuntu-server-focal",
+                        "sku": "20_04-lts-gen2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_foundry_linux_server_name'), '_OsDisk_1_2b8adb9904674553a8d4a5727d67b6bf')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('disks_foundry_linux_server_OsDisk_1_2b8adb9904674553a8d4a5727d67b6bf_externalid')]"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_foundry_linux_server_name')]",
+                    "adminUsername": "dmbabyadmin",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_foundry_linux_server960_externalid')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "https://dndfoundryserverdiag.blob.core.windows.net/"
+                    }
+                }
+            }
+        }
+    ]
+}
